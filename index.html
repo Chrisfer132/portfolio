@@ -4,11 +4,404 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
     <title>Christian Gauer | Portfolio</title>
     <link rel="icon" href="assets/favicon.ico">
     <meta name="description" content="Portfólio Pessoal, Christian Fernando Mazzon Gauer.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #4ade80;
+            --bg-dark: #0f172a;
+            --bg-card: rgba(30, 41, 59, 0.7);
+            --text-gray: #a3b3bc;
+            --container-width: 1200px;
+        }
+
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+            text-decoration: none;
+            list-style: none;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: white;
+            font-family: "Poppins", sans-serif;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Utilitário de Container para centralizar */
+        .container-limit {
+            max-width: var(--container-width);
+            margin: 0 auto;
+            padding: 0 20px;
+            width: 100%;
+        }
+
+        /* --- Header & Nav --- */
+        .cabecalho {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .cabecalho h2 {
+            color: var(--secondary);
+            font-size: 1.5rem;
+            z-index: 1001;
+        }
+
+        .navegacao {
+            display: flex;
+            gap: 30px;
+        }
+
+        .navegacao a {
+            color: white;
+            font-size: 0.95rem;
+            transition: 0.3s;
+            position: relative;
+        }
+
+        .navegacao a:hover {
+            color: var(--secondary);
+        }
+
+        .navegacao a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--secondary);
+            transition: width 0.3s;
+        }
+
+        .navegacao a:hover::after {
+            width: 100%;
+        }
+
+        /* Botão Menu Mobile */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 21px;
+            cursor: pointer;
+            z-index: 1002;
+        }
+
+        .menu-toggle span {
+            height: 3px;
+            width: 100%;
+            background-color: white;
+            border-radius: 3px;
+            transition: 0.3s;
+        }
+
+        /* --- Hero Section --- */
+        main {
+            margin-top: 80px; /* Compensar header fixo */
+        }
+
+        .informacoes {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 60px 0;
+            gap: 40px;
+            min-height: 80vh;
+        }
+
+        .conteudo {
+            flex: 1;
+            max-width: 600px;
+        }
+
+        .conteudo__titulo {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            line-height: 1.1;
+            margin-bottom: 20px;
+        }
+
+        .marcacao-titulo { color: var(--secondary); }
+        .conteudo__texto { font-size: 1.1rem; color: var(--text-gray); margin-bottom: 30px; }
+
+        .links { display: flex; gap: 15px; flex-wrap: wrap; }
+        
+        .links a {
+            padding: 12px 28px;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: 0.3s;
+            text-align: center;
+        }
+
+        .links__link1 { background-color: var(--primary); color: white; }
+        .links__link1:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3); }
+
+        .links__link2 { border: 2px solid var(--primary); color: white; }
+        .links__link2:hover { background-color: var(--primary); }
+
+        /* --- Code Block --- */
+        .code-block {
+            flex: 1;
+            background-color: #1e293b;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.05);
+            max-width: 500px;
+            font-family: 'Fira Code', monospace;
+            position: relative;
+        }
+
+        .code-header { display: flex; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px solid #334155; padding-bottom: 10px; }
+        .code-dots { display: flex; gap: 8px; }
+        .dot { width: 12px; height: 12px; border-radius: 50%; }
+        .dot-red { background: #ef4444; } .dot-yellow { background: #f59e0b; } .dot-green { background: #10b981; }
+        .code-title { color: #64748b; font-size: 0.8rem; }
+        
+        .code-content { font-size: 0.85rem; line-height: 1.6; }
+        .code-line { display: flex; }
+        .code-line-number { color: #475569; min-width: 25px; margin-right: 10px; user-select: none; }
+        
+        /* Cores do código syntax highlight */
+        .token-keyword { color: #c678dd; }
+        .token-string { color: #98c379; }
+        .token-variable { color: #e06c75; }
+        .token-comment { color: #5c6370; font-style: italic; }
+
+        /* --- Background Glows --- */
+        .glow {
+            position: fixed;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            background: var(--primary);
+            opacity: 0.15;
+            filter: blur(100px);
+            z-index: -1;
+            pointer-events: none;
+        }
+        .glow-1 { top: -100px; left: -100px; background: var(--primary); }
+        .glow-2 { bottom: -100px; right: -100px; background: var(--secondary); }
+
+        /* --- Sections General --- */
+        section.pad-section { padding: 80px 0; }
+        
+        h2.section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+            position: relative;
+        }
+        
+        h2.section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background: var(--secondary);
+            margin: 10px auto 0;
+            border-radius: 2px;
+        }
+
+        /* --- Habilidades --- */
+        .habilidades__section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+
+        .skil {
+            background: var(--bg-card);
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.05);
+            text-align: center;
+            transition: 0.3s;
+        }
+
+        .skil:hover { transform: translateY(-5px); border-color: var(--secondary); }
+        .skil h3 { color: var(--secondary); margin-bottom: 20px; }
+        
+        .skil__skils { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+        .skil__skils p {
+            background: rgba(37, 99, 235, 0.2);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: #bfdbfe;
+        }
+
+        /* --- Sobre Mim --- */
+        .sobre-mim__container {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+            background: var(--bg-card);
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .sobre-mim__imagem img {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--primary);
+        }
+
+        .sobre-mim__texto p { color: var(--text-gray); margin-bottom: 15px; }
+
+        /* --- Projetos (Grid System) --- */
+        .section__cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        /* Remover o wrapper intermediário que estava atrapalhando o grid */
+        .cards { display: contents; } 
+
+        .cards__card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .cards__card:hover { transform: translateY(-10px); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+
+        .cards__card img { width: 100%; height: 200px; object-fit: cover; }
+
+        .cards__card__texto { padding: 20px; flex: 1; }
+        .cards__card__texto h3 { color: var(--secondary); margin-bottom: 10px; font-size: 1.2rem; }
+        .cards__card__texto p { color: var(--text-gray); font-size: 0.95rem; }
+
+        .cards__card .skil__skils { padding: 0 20px 20px; justify-content: flex-start; }
+        
+        .cards__card__link {
+            display: block;
+            text-align: center;
+            background: var(--primary);
+            color: white;
+            padding: 15px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+        .cards__card__link:hover { background: #1d4ed8; }
+
+        /* --- Experiência --- */
+        .timeline { border-left: 2px solid var(--primary); margin-left: 10px; padding-left: 30px; }
+        .timeline__item { position: relative; margin-bottom: 40px; }
+        .timeline__item::before {
+            content: ''; position: absolute; left: -37px; top: 0;
+            width: 12px; height: 12px; background: var(--secondary); border-radius: 50%;
+            box-shadow: 0 0 0 4px rgba(74, 222, 128, 0.2);
+        }
+        .timeline__data { background: rgba(37, 99, 235, 0.2); padding: 4px 12px; border-radius: 4px; font-size: 0.85rem; color: var(--secondary); display: inline-block; margin-bottom: 10px; }
+        .timeline__empresa { font-style: italic; color: #94a3b8; margin-bottom: 10px; }
+        .timeline__item li { margin-bottom: 5px; color: var(--text-gray); list-style-type: disc; margin-left: 20px; }
+
+        /* --- Contato --- */
+        .contato__container { display: grid; grid-template-columns: 1fr 1.5fr; gap: 50px; }
+        
+        .contato__card {
+            display: flex; align-items: center; gap: 15px;
+            background: var(--bg-card); padding: 20px; border-radius: 12px; margin-bottom: 15px;
+        }
+        .contato__icone { color: var(--secondary); }
+        .redes__links { display: flex; gap: 15px; margin-top: 20px; }
+        .rede__link { 
+            width: 45px; height: 45px; background: rgba(255,255,255,0.05); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; color: white; transition: 0.3s;
+        }
+        .rede__link:hover { background: var(--primary); transform: translateY(-3px); }
+
+        /* Form */
+        .form__card { background: var(--bg-card); padding: 40px; border-radius: 15px; }
+        .form__row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .form__grupo { margin-bottom: 20px; }
+        .form__grupo label { display: block; margin-bottom: 8px; font-size: 0.9rem; }
+        .form__grupo input, .form__grupo textarea {
+            width: 100%; padding: 12px; background: rgba(15, 23, 42, 0.5);
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: white; outline: none;
+        }
+        .form__grupo input:focus, .form__grupo textarea:focus { border-color: var(--primary); }
+        
+        .form__botao {
+            width: 100%; padding: 15px; background: var(--primary); color: white; border: none;
+            border-radius: 8px; cursor: pointer; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s;
+        }
+        .form__botao:hover { background: var(--secondary); color: #0f172a; }
+        
+        /* Feedback Mensagens */
+        .form__message { margin-top: 15px; padding: 10px; border-radius: 5px; text-align: center; font-size: 0.9rem; }
+        .form__message--success { background: rgba(74, 222, 128, 0.2); color: #4ade80; }
+        .form__message--error { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+
+        /* --- RESPONSIVIDADE (MEDIA QUERIES) --- */
+        @media screen and (max-width: 992px) {
+            .informacoes { flex-direction: column; text-align: center; }
+            .conteudo__titulo { font-size: 3rem; }
+            .links { justify-content: center; }
+            .code-block { width: 100%; }
+            .sobre-mim__container { flex-direction: column; text-align: center; }
+            .contato__container { grid-template-columns: 1fr; }
+        }
+
+        @media screen and (max-width: 768px) {
+            .menu-toggle { display: flex; }
+            
+            .navegacao {
+                position: fixed;
+                top: 70px; right: -100%;
+                width: 70%; height: calc(100vh - 70px);
+                background: #1e293b;
+                flex-direction: column;
+                padding: 40px;
+                transition: 0.4s;
+                border-left: 1px solid rgba(255,255,255,0.1);
+            }
+            
+            .navegacao.active { right: 0; }
+            
+            .form__row { grid-template-columns: 1fr; }
+            .cards__card img { height: 180px; }
+        }
+
+    </style>
 </head>
 
 <body>
@@ -16,519 +409,362 @@
     <div class="glow glow-2"></div>
 
     <header class="cabecalho">
-        <h2>JS //</h2>
-        <nav class="navegacao">
-            <a href="#inicio">Inicio</a>
-            <a href="#habilidades">Habilidades</a>
-            <a href="#projetos">Projetos</a>
-            <a href="#experiencia">Experiência</a>
-            <a href="#contato">Contato</a>
-            <!-- O botão de fechar será adicionado via JavaScript -->
-        </nav>
-        <!-- O botão de menu será adicionado via JavaScript -->
+        <div class="container-limit" style="display: flex; justify-content: space-between; align-items: center; padding: 0;">
+            <h2>JS //</h2>
+            
+            <div class="menu-toggle" id="mobile-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+
+            <nav class="navegacao">
+                <a href="#inicio">Inicio</a>
+                <a href="#habilidades">Habilidades</a>
+                <a href="#projetos">Projetos</a>
+                <a href="#experiencia">Experiência</a>
+                <a href="#contato">Contato</a>
+            </nav>
+        </div>
     </header>
 
-    <main>
-        <section class="informacoes">
-            <section class="conteudo">
-                <h1 class="conteudo__titulo">Olá! Eu sou <span class="marcacao-titulo">Christian Gauer</span></h1>
-                <p class="conteudo__texto">Sou estudante Front-End, apaixonado por programação, sempre atento às novas
-                    tecnologias e empenhado em ampliar meu conhecimento.</p>
-                <div class="links">
-                    <a href="#contato" class="links__link1">Entre em contato</a>
-                    <a href="#projetos" class="links__link2">Ver Projetos</a>
-                </div>
-            </section>
-            <div class="code-block">
-                <div class="code-header">
-                    <div class="code-dots">
-                        <div class="dot dot-red"></div>
-                        <div class="dot dot-yellow"></div>
-                        <div class="dot dot-green"></div>
+    <main id="inicio">
+        <div class="container-limit">
+            <section class="informacoes">
+                <section class="conteudo">
+                    <h1 class="conteudo__titulo">Olá! Eu sou <span class="marcacao-titulo">Christian Gauer</span></h1>
+                    <p class="conteudo__texto">Sou estudante Front-End, apaixonado por programação, sempre atento às novas tecnologias e empenhado em ampliar meu conhecimento.</p>
+                    <div class="links">
+                        <a href="#contato" class="links__link1">Entre em contato</a>
+                        <a href="#projetos" class="links__link2">Ver Projetos</a>
                     </div>
-                    <div class="code-title">christian.js</div>
-                </div>
-                <div class="code-content">
-                    <div class="code-line">
-                        <span class="code-line-number">1</span>
-                        <span class="token-keyword">const</span> <span class="token-variable">desenvolvedor</span> = {
-                    </div>
-                    <div class="code-line">
-                        <span class="code-line-number">2</span>
-                        <span>&nbsp;&nbsp;nome: </span><span class="token-string">'Christian Gauer'</span>,
-                    </div>
-                    <div class="code-line">
-                        <span class="code-line-number">3</span>
-                        <span>&nbsp;&nbsp;cargo: </span><span class="token-string">'Front-End Developer'</span>,
-                    </div>
-                    <div class="code-line">
-                        <span class="code-line-number">4</span>
-                        <span>&nbsp;&nbsp;habilidades: [</span>
-                    </div>
-                    <div class="code-line">
-                        <span class="code-line-number">5</span>
-                        <span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="token-string">'JavaScript'</span>, <span
-                            class="token-string">'Python'</span>,
-                    </div>
-                    <div class="code-line">
-                        <span class="code-line-number">6</span>
-                        <span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="token-string">'React'</span>, <span
-                            class="token-string">'Tailwind CSS'</span>, <span class="token-string">'Figma'</span>
-                    </div>
-                    <div class="code-line">
-                        <span class="code-line-number">7</span>
-                        <span>&nbsp;&nbsp;],</span>
-                    </div>
-                    <div class="code-line">
-                        <span class="code-line-number">8</span>
-                        <span>&nbsp;&nbsp;softSkills: [</span>
-                    </div>
-                    <div class="code-line">
-                        <span class="code-line-number">9</span>
-                        <span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="token-string">'Trabalho em equipe'</span>,
-                    </div>
-                    <div class="code-line">
-                        <span class="code-line-number">10</span>
-                        <span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="token-string">'Comunicação'</span>,
-                    </div>
-                    <div class="code-line">
-                        <span class="code-line-number">11</span>
-                        <span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="token-string">'Facilidade de
-                            aprendizado'</span>
-                    </div>
-                    <div class="code-line">
-                        <span class="code-line-number">12</span>
-                        <span>&nbsp;&nbsp;],</span>
-                    </div>
-                    <div class="code-line">
-                        <span class="code-line-number">13</span>
-                        <span>&nbsp;&nbsp;<span class="token-comment">// Em busca de novos desafios...</span></span>
-                    </div>
-                    <div class="code-line">
-                        <span class="code-line-number">14</span>
-                        <span>};</span>
-                    </div>
-                </div>
-            </div>
-
-        </section>
-
-        <section class="habilidades" id="habilidades">
-            <h2>Minhas Habilidades</h2>
-            <section class="habilidades__section">
-                <div class="skil">
-                    <h3>Linguagens de Programação</h3>
-                    <div class="skil__skils">
-                        <p>JavaScript</p>
-                        <p>Python</p>
-                        <p>C++</p>
-                    </div>
-                </div>
-                <div class="skil">
-                    <h3>FrameWorks/Bibliotecas</h3>
-                    <div class="skil__skils">
-                        <p>React + Vite</p>
-                        <p>Tailwind</p>
-                    </div>
-                </div>
-                <div class="skil">
-                    <h3>Ferramentas</h3>
-                    <div class="skil__skils">
-                        <p>Github</p>
-                        <p>Vscode</p>
-                        <p>Figma</p>
-                    </div>
-                </div>
-            </section>
-        </section>
-
-        <section class="sobre-mim">
-            <h2>Sobre Mim</h2>
-            <div class="sobre-mim__container">
-                <div class="sobre-mim__imagem">
-                    <img src="assets/fotoPerfil.png" alt="Foto de Christian Gauer">
-                </div>
-                <div class="sobre-mim__texto">
-                    <p>Olá! Sou Christian Fernando Mazzon Gauer, um desenvolvedor Front-End apaixonado por criar
-                        soluções digitais
-                        criativas e eficientes. Minha jornada na programação começou com a curiosidade de entender como
-                        as coisas funcionam no mundo digital, e desde então tenho me dedicado a aprimorar minhas
-                        habilidades e conhecimentos.</p>
-
-                    <p>Quando não estou codando, gosto de correr, jogar, estudar e resolver puzzles. Essa combinação de
-                        interesses me ajuda a manter uma perspectiva equilibrada e criativa em meu trabalho.</p>
-                </div>
-            </div>
-        </section>
-
-
-        <section class="projetos" id="projetos">
-            <h2>Alguns projetos como Freelancer</h2>
-            <div class="section__cards">
-
-
-                <div class="cards">
-                    <div class="cards__card">
-                        <img src="assets/freelancer5.png" alt="">
-                        <div class="cards__card__texto">
-                            <h3>Landing Page - Assistência Técnica/h3>
-                                <p>Página voltada para o posicionamento digital de uma Assistência, focada na captação e
-                                    fragmentação de Leads</p>
+                </section>
+                
+                <div class="code-block">
+                    <div class="code-header">
+                        <div class="code-dots">
+                            <div class="dot dot-red"></div>
+                            <div class="dot dot-yellow"></div>
+                            <div class="dot dot-green"></div>
                         </div>
-                        <span class="skil__skils">
+                        <div class="code-title">christian.js</div>
+                    </div>
+                    <div class="code-content">
+                        <div class="code-line"><span class="code-line-number">1</span><span class="token-keyword">const</span> <span class="token-variable">desenvolvedor</span> = {</div>
+                        <div class="code-line"><span class="code-line-number">2</span>&nbsp;&nbsp;nome: <span class="token-string">'Christian Gauer'</span>,</div>
+                        <div class="code-line"><span class="code-line-number">3</span>&nbsp;&nbsp;cargo: <span class="token-string">'Front-End Developer'</span>,</div>
+                        <div class="code-line"><span class="code-line-number">4</span>&nbsp;&nbsp;habilidades: [</div>
+                        <div class="code-line"><span class="code-line-number">5</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="token-string">'JavaScript'</span>, <span class="token-string">'Python'</span>,</div>
+                        <div class="code-line"><span class="code-line-number">6</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="token-string">'React'</span>, <span class="token-string">'Tailwind'</span></div>
+                        <div class="code-line"><span class="code-line-number">7</span>&nbsp;&nbsp;],</div>
+                        <div class="code-line"><span class="code-line-number">8</span>&nbsp;&nbsp;<span class="token-comment">// Em busca de novos desafios...</span></div>
+                        <div class="code-line"><span class="code-line-number">9</span>};</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="pad-section" id="habilidades">
+                <h2 class="section-title">Minhas Habilidades</h2>
+                <div class="habilidades__section">
+                    <div class="skil">
+                        <h3>Linguagens</h3>
+                        <div class="skil__skils">
+                            <p>JavaScript</p>
+                            <p>Python</p>
+                            <p>C++</p>
+                        </div>
+                    </div>
+                    <div class="skil">
+                        <h3>Frameworks</h3>
+                        <div class="skil__skils">
+                            <p>React + Vite</p>
+                            <p>Tailwind CSS</p>
+                            <p>Bootstrap</p>
+                        </div>
+                    </div>
+                    <div class="skil">
+                        <h3>Ferramentas</h3>
+                        <div class="skil__skils">
+                            <p>Github</p>
+                            <p>VS Code</p>
                             <p>Figma</p>
-                            <p>React</p>
-                            <p>Tailwind</p>
-                        </span>
-                        <a href="https://projeto-fly-christian.vercel.app/" class="cards__card__link">Ver Projeto</a>
-                    </div>
-                </div>
-
-                <div class="cards">
-                    <div class="cards__card">
-                        <img src="assets/freelancer4.png" alt="">
-                        <div class="cards__card__texto">
-                            <h3>Landing page - Personal Trainer</h3>
-                            <p>Desenvolvida para um Personal Trainer, focada na apresentação dos seus serviços,
-                                metodologia de trabalho e captação de leads.
-                            </p>
                         </div>
-                        <span class="skil__skils">
-                            <p>HTML</p>
-                            <p>CSS</p>
-                            <p>JS</p>
-                        </span>
-                        <a href="https://gabrielpersonal.vercel.app" class="cards__card__link">Ver
-                            Projeto</a>
                     </div>
                 </div>
+            </section>
 
-                <div class="cards">
+            <section class="pad-section sobre-mim">
+                <h2 class="section-title">Sobre Mim</h2>
+                <div class="sobre-mim__container">
+                    <div class="sobre-mim__imagem">
+                        <img src="assets/fotoPerfil.png" alt="Foto de Christian Gauer">
+                    </div>
+                    <div class="sobre-mim__texto">
+                        <p>Olá! Sou Christian Fernando Mazzon Gauer, um desenvolvedor Front-End apaixonado por criar soluções digitais criativas e eficientes. Minha jornada na programação começou com a curiosidade de entender como as coisas funcionam no mundo digital, e desde então tenho me dedicado a aprimorar minhas habilidades.</p>
+                        <p>Quando não estou codando, gosto de correr, jogar, estudar e resolver puzzles. Essa combinação de interesses me ajuda a manter uma perspectiva equilibrada e criativa em meu trabalho.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="pad-section" id="projetos">
+                <h2 class="section-title">Projetos Freelancer</h2>
+                <div class="section__cards">
                     <div class="cards__card">
-                        <img src="assets/freelancer3.png" alt="">
+                        <img src="assets/freelancer5.png" alt="Assistência Técnica">
+                        <div class="cards__card__texto">
+                            <h3>Landing Page - Assistência</h3>
+                            <p>Página voltada para posicionamento digital e captação de leads.</p>
+                        </div>
+                        <div class="skil__skils">
+                            <p>React</p><p>Tailwind</p><p>Figma</p>
+                        </div>
+                        <a href="https://projeto-fly-christian.vercel.app/" class="cards__card__link" target="_blank">Ver Projeto</a>
+                    </div>
+                    <div class="cards__card">
+                        <img src="assets/freelancer4.png" alt="Personal Trainer">
+                        <div class="cards__card__texto">
+                            <h3>Landing Page - Personal</h3>
+                            <p>Focada na apresentação de serviços e metodologia de trabalho.</p>
+                        </div>
+                        <div class="skil__skils">
+                            <p>HTML</p><p>CSS</p><p>JS</p>
+                        </div>
+                        <a href="https://gabrielpersonal.vercel.app" class="cards__card__link" target="_blank">Ver Projeto</a>
+                    </div>
+                    <div class="cards__card">
+                        <img src="assets/freelancer3.png" alt="Woods Shampoo">
                         <div class="cards__card__texto">
                             <h3>Landing Page - Woods</h3>
-                            <p>Página de aterrissagem (landing page) responsiva para uma linha de shampoos, destacando
-                                os benefícios e ingredientes do produto.</p>
+                            <p>Página responsiva destacando benefícios de uma linha de produtos.</p>
                         </div>
-                        <span class="skil__skils">
-                            <p>HTML</p>
-                            <p>CSS</p>
-                            <p>JS</p>
-                        </span>
-                        <a href="https://landingpage-shampoo.vercel.app" class="cards__card__link">Ver Projeto</a>
+                        <div class="skil__skils">
+                            <p>HTML</p><p>CSS</p><p>JS</p>
+                        </div>
+                        <a href="https://landingpage-shampoo.vercel.app" class="cards__card__link" target="_blank">Ver Projeto</a>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-
-        <section class="projetos" id="projetos">
-            <h2>Projetos de Aprendizado</h2>
-            <div class="section__cards">
-
-                <div class="cards">
+            <section class="pad-section" id="projetos-estudos">
+                <h2 class="section-title">Projetos de Aprendizado</h2>
+                <div class="section__cards">
                     <div class="cards__card">
-                        <img src="assets/projeto9.png" alt="Miniatura site - Chatbot">
+                        <img src="assets/projeto9.png" alt="Chatbot">
                         <div class="cards__card__texto">
-                            <h3>ChatBot</h3>
-                            <p>Uma aplicação de chatbot dinâmica e responsiva, que simula uma conversa em tempo real.
-                                Criada principalmente usando o framework React</p>
+                            <h3>ChatBot React</h3>
+                            <p>Aplicação dinâmica simulando conversa em tempo real.</p>
                         </div>
-                        <span class="skil__skils">
-                            <p>HTML</p>
-                            <p>CSS</p>
-                            <p>REACT</p>
-                            <p>JS</p>
-                        </span>
-                        <a href="https://react-chatbot-project.vercel.app" class="cards__card__link">Ver Projeto</a>
+                        <div class="skil__skils">
+                            <p>React</p><p>JS</p>
+                        </div>
+                        <a href="https://react-chatbot-project.vercel.app" class="cards__card__link" target="_blank">Ver Projeto</a>
                     </div>
-                </div>
-
-                <div class="cards">
                     <div class="cards__card">
-                        <img src="assets/projeto1.png" alt="Miniatura site - Pack do Estudante">
+                        <img src="assets/projeto1.png" alt="Pack do Estudante">
                         <div class="cards__card__texto">
                             <h3>Pack do Estudante</h3>
-                            <p>O Pack é uma plataforma estudantil que reúne diversas ferramentas e
-                                materiais úteis para estudantes de diferentes níveis acadêmicos.</p>
+                            <p>Plataforma reunindo ferramentas úteis para estudantes.</p>
                         </div>
-                        <span class="skil__skils">
-                            <p>HTML</p>
-                            <p>CSS</p>
-                            <p>API</p>
-                            <p>JS</p>
-                        </span>
-                        <a href="https://packdoestudante.vercel.app" class="cards__card__link">Ver Projeto</a>
-                    </div>
-                </div>
-
-                <div class="cards">
-                    <div class="cards__card">
-                        <img src="assets/projeto6.png" alt="">
-                        <div class="cards__card__texto">
-                            <h3>Sorteador de Nomes</h3>
-                            <p>O tem como objetivo permitir que os usuários adicionem nomes a uma lista e realizem um
-                                sorteio aleatório entre os amigos cadastrados.</p>
+                        <div class="skil__skils">
+                            <p>API</p><p>JS</p>
                         </div>
-                        <span class="skil__skils">
-                            <p>HTML</p>
-                            <p>CSS</p>
-                            <p>JS</p>
-                        </span>
-                        <a href="https://sortear-amigo-secreto-two.vercel.app/" class="cards__card__link">Ver
-                            Projeto</a>
+                        <a href="https://packdoestudante.vercel.app" class="cards__card__link" target="_blank">Ver Projeto</a>
                     </div>
-                </div>
-
-                <div class="cards">
                     <div class="cards__card">
-                        <img src="assets/projeto5.png" alt="">
+                        <img src="assets/projeto5.png" alt="Número Secreto">
                         <div class="cards__card__texto">
                             <h3>Número Secreto</h3>
-                            <p>O Jogo do Número Secreto é um jogo simples e divertido no qual o usuário tenta adivinhar
-                                um número gerado aleatoriamente pelo sistema.</p>
+                            <p>Jogo de lógica para adivinhar números aleatórios.</p>
                         </div>
-                        <span class="skil__skils">
-                            <p>HTML</p>
-                            <p>CSS</p>
-                            <p>JS</p>
-                        </span>
-                        <a href="https://numero-secreto-one-sooty.vercel.app" class="cards__card__link">Ver Projeto</a>
+                        <div class="skil__skils">
+                            <p>Lógica</p><p>JS</p>
+                        </div>
+                        <a href="https://numero-secreto-one-sooty.vercel.app" class="cards__card__link" target="_blank">Ver Projeto</a>
                     </div>
                 </div>
+            </section>
 
-                <div class="cards">
-                    <div class="cards__card">
-                        <img src="assets/projeto2.png" alt="">
-                        <div class="cards__card__texto">
-                            <h3>Calculadora IMC</h3>
-                            <p>Uma aplicação simples para calcular o Índice de Massa Corporal (IMC), com uma interface
-                                prática, moderna e responsiva. Ideal para quem quer descobrir rapidamente seu índice.
-                            </p>
-                        </div>
-                        <span class="skil__skils">
-                            <p>HTML</p>
-                            <p>CSS</p>
-                            <p>JS</p>
-                        </span>
-                        <a href="https://chrisfer132.github.io/calculadora-imc/" class="cards__card__link">Ver
-                            Projeto</a>
+            <section class="pad-section" id="experiencia">
+                <h2 class="section-title">Experiência Profissional</h2>
+                <div class="timeline">
+                    <div class="timeline__item">
+                        <div class="timeline__data">Novembro 2024 - Presente</div>
+                        <h3 class="timeline__titulo">Suporte de Sistemas</h3>
+                        <div class="timeline__empresa">PradoSoft - Seberi, RS</div>
+                        <ul>
+                            <li>Suporte online para resolução de erros em sistemas empresariais.</li>
+                            <li>Utilização de PostgreSQL para diagnóstico de dados.</li>
+                            <li>Comunicação direta com clientes para implementação de soluções.</li>
+                        </ul>
+                    </div>
+                    <div class="timeline__item">
+                        <div class="timeline__data">Agosto 2024 - Presente</div>
+                        <h3 class="timeline__titulo">Freelancer Front-End</h3>
+                        <div class="timeline__empresa">Autônomo</div>
+                        <ul>
+                            <li>Desenvolvimento de landing pages e sites institucionais.</li>
+                            <li>Uso de React, Tailwind e Figma.</li>
+                            <li>Entrega de projetos focados em performance e SEO.</li>
+                        </ul>
+                    </div>
+                    <div class="timeline__item">
+                        <div class="timeline__data">Abril 2023 - Novembro 2024</div>
+                        <h3 class="timeline__titulo">Jovem Aprendiz T.I</h3>
+                        <div class="timeline__empresa">JBS - Seberi, RS</div>
+                        <ul>
+                            <li>Manutenção de hardware e redes de computadores.</li>
+                            <li>Suporte técnico a usuários e configuração de impressoras.</li>
+                            <li>Gestão de chamados e ambiente Office 365.</li>
+                        </ul>
                     </div>
                 </div>
+            </section>
 
-                <div class="cards">
-                    <div class="cards__card">
-                        <img src="assets/projeto8.png" alt="">
-                        <div class="cards__card__texto">
-                            <h3>FlashCards</h3>
-                            <p>Com ele, criar flashcards é super simples: basta digitar "frente, verso" e o cartão é
-                                salvo automaticamente no navegador.</p>
-                        </div>
-                        <span class="skil__skils">
-                            <p>HTML</p>
-                            <p>CSS</p>
-                            <p>JS</p>
-                        </span>
-                        <a href="https://flashcards-dinamico.vercel.app" class="cards__card__link">Ver Projeto</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        
-
-        <section id="experiencia">
-            <h2 class="experiencia__titulo">Experiência Profissional</h2>
-            <div class="experiencia">
-                <div class="container">
-                    <div class="timeline">
-                        <div class="timeline__item">
-                            <div class="timeline__data">Novembro 2024 - Presente</div>
-                            <h3 class="timeline__titulo">Suporte de Sistemas</h3>
-                            <div class="timeline__empresa">PradoSoft - Seberi, RS</div>
-                            <ul>
-                                <li>Atuação como Suporte de Sistemas, prestando suporte online para identificar e
-                                    resolver erros em sistemas utilizados por empresas.</li>
-                                <li>Análise de problemas, orientação de usuários e implementação de soluções eficazes
-                                    para garantir o funcionamento adequado dos sistemas.</li>
-                                <li>Utilização do banco de dados PostgreSQL, com consultas e ferramentas para
-                                    diagnosticar e corrigir inconsistências.</li>
-                                <li>Contribuição para a eficiência e estabilidade das operações empresariais.</li>
-                                <li>Aprimoramento contínuo das habilidades técnicas e de comunicação, fortalecendo a
-                                    capacidade de solucionar problemas de forma ágil e eficaz.</li>
-                            </ul>
-                        </div>
-
-                        <div class="timeline__item">
-                            <div class="timeline__data">Agosto 2024 - Presente</div>
-                            <h3 class="timeline__titulo">Freelancer em Desenvolvimento WEB</h3>
-                            <div class="timeline__empresa">Freelancer - Autônomo</div>
-                            <ul>
-                                <li>Atuação como desenvolvedor freelancer nas horas livres, criando páginas de vendas,
-                                    sites empresariais e soluções web personalizadas para diversos clientes.</li>
-                                <li>Responsável pelo design, desenvolvimento e implementação dos projetos.</li>
-                                <li>Utilização de tecnologias como HTML, CSS, JavaScript e frameworks/bibliotecas modernas.</li>
-                                <li>Entrega de todos os projetos dentro do prazo e alinhados às expectativas do cliente.
-                                </li>
-                            </ul>
-                        </div>
-
-                        <div class="timeline__item">
-                            <div class="timeline__data">Abril 2023 - Novembro 2024</div>
-                            <h3 class="timeline__titulo">Jovem Aprendiz - Setor T.I</h3>
-                            <div class="timeline__empresa">JBS - Seberi, RS</div>
-                            <ul>
-                                <li>Atuação como Jovem Aprendiz no setor de TI, desenvolvendo habilidades em suporte
-                                    técnico, manutenção de equipamentos e redes de computadores.</li>
-                                <li>Responsável pela formatação e manutenção de computadores, configuração de redes
-                                    Wi-Fi, manutenção de impressoras, instalação e montagem de hardware.</li>
-                                <li>Abertura e acompanhamento de chamados técnicos para resolução eficiente de
-                                    problemas.</li>
-                                <li>Aperfeiçoamento de competências em Office 365, suporte técnico, redes de
-                                    computadores e comunicação eficaz.</li>
-                                <li>Fortalecimento da capacidade de oferecer soluções práticas e eficazes no ambiente
-                                    corporativo.</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="contato" id="contato">
-            <h2>Entre em Contato</h2>
-            <div class="contato__container">
-                <div class="contato__info">
-                    <div class="contato__metodos">
+            <section class="pad-section" id="contato">
+                <h2 class="section-title">Entre em Contato</h2>
+                <div class="contato__container">
+                    <div class="contato__info">
                         <div class="contato__card">
                             <div class="contato__icone">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round">
-                                    <path
-                                        d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
-                                    </path>
-                                </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
                             </div>
                             <div class="contato__info-content">
-                                <h3>Telefone</h3>
-                                <p>(55) 997253484</p>
+                                <h3>Telefone/WhatsApp</h3>
+                                <p>(55) 99725-3484</p>
                             </div>
                         </div>
-
                         <div class="contato__card">
                             <div class="contato__icone">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round">
-                                    <path
-                                        d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
-                                    </path>
-                                    <polyline points="22,6 12,13 2,6"></polyline>
-                                </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
                             </div>
                             <div class="contato__info-content">
                                 <h3>Email</h3>
                                 <p>christianfernando132@gmail.com</p>
                             </div>
                         </div>
-
-                        <div class="contato__card">
-                            <div class="contato__icone">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round">
-                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                                    <circle cx="12" cy="10" r="3"></circle>
-                                </svg>
-                            </div>
-                            <div class="contato__info-content">
-                                <h3>Localização</h3>
-                                <p>Seberi, RS - Brasil</p>
+                        <div class="contato__redes">
+                            <h3>Me encontre nas redes</h3>
+                            <div class="redes__links">
+                                <a href="https://www.linkedin.com/in/christian-mgauer/" target="_blank" class="rede__link">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                                </a>
+                                <a href="https://github.com/Chrisfer132" target="_blank" class="rede__link">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                                </a>
+                                <a href="https://www.instagram.com/christian_fmg_/" target="_blank" class="rede__link">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                                </a>
                             </div>
                         </div>
                     </div>
 
-                    <div class="contato__redes">
-                        <h3>Me encontre nas redes</h3>
-                        <div class="redes__links">
-                            <a href="https://www.linkedin.com/in/christian-mgauer/" class="rede__link">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round">
-                                    <path
-                                        d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z">
-                                    </path>
-                                    <rect x="2" y="9" width="4" height="12"></rect>
-                                    <circle cx="4" cy="4" r="2"></circle>
-                                </svg>
-                            </a>
-                            <a href="https://github.com/Chrisfer132" class="rede__link">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round">
-                                    <path
-                                        d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
-                                    </path>
-                                </svg>
-                            </a>
-                            <a href="https://www.instagram.com/christian_fmg_/" class="rede__link">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round">
-                                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-                                </svg>
-                            </a>
+                    <div class="contato__formulario">
+                        <div class="form__card">
+                            <h3>Envie uma mensagem</h3>
+                            <form>
+                                <div class="form__row">
+                                    <div class="form__grupo">
+                                        <label for="nome">Nome</label>
+                                        <input type="text" id="nome" name="nome" placeholder="Seu nome" required>
+                                    </div>
+                                    <div class="form__grupo">
+                                        <label for="email">Email</label>
+                                        <input type="email" id="email" name="email" placeholder="Seu email" required>
+                                    </div>
+                                </div>
+                                <div class="form__grupo">
+                                    <label for="assunto">Assunto</label>
+                                    <input type="text" id="assunto" name="assunto" placeholder="Assunto" required>
+                                </div>
+                                <div class="form__grupo">
+                                    <label for="mensagem">Mensagem</label>
+                                    <textarea id="mensagem" name="mensagem" placeholder="Sua mensagem..." rows="5" required></textarea>
+                                </div>
+                                <button type="submit" class="form__botao">
+                                    <span>Enviar Mensagem</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
-
-                <div class="contato__formulario">
-                    <div class="form__card">
-                        <h3>Envie uma mensagem</h3>
-                        <form>
-                            <div class="form__row">
-                                <div class="form__grupo">
-                                    <label for="nome">Nome</label>
-                                    <input type="text" id="nome" name="nome" placeholder="Seu nome completo" required>
-                                </div>
-                                <div class="form__grupo">
-                                    <label for="email">Email</label>
-                                    <input type="email" id="email" name="email" placeholder="Seu email" required>
-                                </div>
-                            </div>
-                            <div class="form__grupo">
-                                <label for="assunto">Assunto</label>
-                                <input type="text" id="assunto" name="assunto" placeholder="Assunto da mensagem"
-                                    required>
-                            </div>
-                            <div class="form__grupo">
-                                <label for="mensagem">Mensagem</label>
-                                <textarea id="mensagem" name="mensagem" placeholder="Digite sua mensagem aqui..."
-                                    rows="6" required></textarea>
-                            </div>
-                            <button type="submit" class="form__botao">
-                                <span>Enviar Mensagem</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round">
-                                    <line x1="22" y1="2" x2="11" y2="13"></line>
-                                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                                </svg>
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </section>
-
+            </section>
+        </div>
     </main>
 
-    <footer></footer>
-    <script src="app.js"></script>
-</body>
+    <footer>
+        <div class="container-limit" style="text-align: center; padding: 20px; font-size: 0.8rem; color: #64748b;">
+            &copy; 2024 Christian Gauer. Todos os direitos reservados.
+        </div>
+    </footer>
 
+    <script>
+        // --- 1. Menu Mobile ---
+        const menuToggle = document.getElementById('mobile-menu');
+        const nav = document.querySelector('.navegacao');
+        const navLinks = document.querySelectorAll('.navegacao a');
+
+        menuToggle.addEventListener('click', () => {
+            nav.classList.toggle('active');
+        });
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                nav.classList.remove('active');
+            });
+        });
+
+        // --- 2. Configuração EmailJS ---
+        (function() {
+            // Substitua pelo seu PUBLIC KEY real do EmailJS
+            emailjs.init("SPI7MSQY9c-ziO9JZ");
+        })();
+
+        function sendEmail(e) {
+            e.preventDefault();
+            const button = document.querySelector('.form__botao');
+            const originalText = button.innerHTML;
+            button.innerHTML = '<span>Enviando...</span>';
+            button.disabled = true;
+
+            const name = document.getElementById('nome').value;
+            const email = document.getElementById('email').value;
+            const subject = document.getElementById('assunto').value;
+            const message = document.getElementById('mensagem').value;
+
+            const templateParams = {
+                from_name: name,
+                from_email: email,
+                subject: subject,
+                message: message
+            };
+
+            emailjs.send("service_l0dugds", "template_wzq0brv", templateParams)
+                .then(function(response) {
+                    showMessage('Mensagem enviada com sucesso!', 'success');
+                    document.querySelector('form').reset();
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                }, function(error) {
+                    console.log('Erro:', error);
+                    showMessage('Erro ao enviar mensagem.', 'error');
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                });
+        }
+
+        function showMessage(message, type) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `form__message form__message--${type}`;
+            messageDiv.textContent = message;
+            
+            const form = document.querySelector('form');
+            form.insertBefore(messageDiv, document.querySelector('.form__botao'));
+            
+            setTimeout(() => { messageDiv.remove(); }, 5000);
+        }
+
+        document.querySelector('form').addEventListener('submit', sendEmail);
+    </script>
+</body>
 </html>
